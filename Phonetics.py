@@ -19,16 +19,16 @@ def textgrid_experiment(gridfile):
 	stoppoints = word_df['stop'].to_list()
 	sound_df = csv.loc[csv['tier'] == 'Sound'][csv['name']!='']
 	
-	#ищу индексы тех звуков, начальные метки которых совпадают с начальными метками соответствующих слов
+	## ищу индексы тех звуков, начальные метки которых совпадают с начальными метками соответствующих слов
 	start_indexes = []
 	for startpoint in startpoints:
 		start_indexes.append(sound_df.index[sound_df.start == startpoint].to_list())
-	#ищу индексы тех звуков, конечные метки которых совпадают с конечными метками соответствующих слов
+	## ищу индексы тех звуков, конечные метки которых совпадают с конечными метками соответствующих слов
 	stop_indexes = []
 	for stoppoint in stoppoints:
 		stop_indexes.append(sound_df.index[sound_df.stop == stoppoint].to_list())
 		
-	wordpoints = [] #индексы начального и конечного звуков для каждого слова
+	wordpoints = [] ###индексы начального и конечного звуков для каждого слова
 	wrong_indexes = []
 	for start,stop in zip(start_indexes,stop_indexes):
 		if len(start) != 0 and len(stop) != 0:
@@ -37,17 +37,17 @@ def textgrid_experiment(gridfile):
 		else:
 			for i,j in enumerate(start_indexes):
 				if j == start:
-					wrong_indexes.append(i) # нахожу то, что не совпало
+					wrong_indexes.append(i) ###нахожу то, что не совпало
 	wrong_indexes=set(wrong_indexes)				
 	startpoints = [i for i in startpoints if startpoints.index(i) not in wrong_indexes] # убираю то, что не совпало
 	stoppoints = [i for i in stoppoints if stoppoints.index(i) not in wrong_indexes] # убираю то, что не совпало
 	
-	absolute_durations = [] #абсолютные длительности слов
+	absolute_durations = [] ###абсолютные длительности слов
 	for start,stop in zip (startpoints,stoppoints):
 		absolute_duration = stop-start
 		absolute_durations.append(absolute_duration)
 		
-	amount_of_sounds_in_a_word = [] #количество звуков в слове                                                     
+	amount_of_sounds_in_a_word = [] ###количество звуков в слове                                                     
 	for two_points in wordpoints:	
 		length = two_points[1]-two_points[0]+1
 		amount_of_sounds_in_a_word.append(length)
@@ -59,22 +59,22 @@ def textgrid_experiment(gridfile):
 	## ударные
 	stressed_indexes = []
 	for a,b in zip(all_sounds,all_indexes):
-		if "ˈ" in a: #нахожу ударные по символу
+		if "ˈ" in a: ###нахожу ударные по символу
 			stressed_indexes.append(b)
 	## безударные в конце слова
 	vowels_end_word = []
 	non_stressed_list2 = ['ь','ъ','ɑ'] #список
 	for a,b in zip(all_sounds,all_indexes):
 		if a in non_stressed_list2:
-			if sound_df['stop'][b] in stoppoints: #безударные в конце слова нахожу по метке конца слова
+			if sound_df['stop'][b] in stoppoints: ###безударные в конце слова нахожу по метке конца слова
 				vowels_end_word.append(b)
 
 	## безударные не в конце слова
 	non_stressed_non_end_word_indexes = []
-	non_stressed_list1 = ['ʌ','ь','ъ','и','у','ы'] #список
+	non_stressed_list1 = ['ʌ','ь','ъ','и','у','ы'] ###список
 	for a,b in zip(all_sounds,all_indexes):
 		if a in non_stressed_list1:
-			if sound_df['stop'][b] not in stoppoints: #безударные не в конце слова нахожу по несоответствию метке конца слова
+			if sound_df['stop'][b] not in stoppoints: ###безударные не в конце слова нахожу по несоответствию метке конца слова
 				non_stressed_non_end_word_indexes.append(b)
 
 	# находим относительную длительность звука
@@ -87,7 +87,7 @@ def textgrid_experiment(gridfile):
 			for word_marker in wordpoints:
 				if s_vowel >= word_marker[0] and s_vowel <= word_marker[1]:
 					true_word_index = wordpoints.index(word_marker)
-					absolute_sound_duration = sound_df['stop'][s_vowel] - sound_df['start'][s_vowel] #абсолютная длительность звука
+					absolute_sound_duration = sound_df['stop'][s_vowel] - sound_df['start'][s_vowel] ###абсолютная длительность звука
 					relative_duration = absolute_sound_duration*amount_of_sounds_in_a_word[true_word_index]/absolute_durations[true_word_index]
 					result_list.append(relative_duration)
 					
