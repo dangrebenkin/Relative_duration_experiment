@@ -56,14 +56,14 @@ def textgrid_experiment(gridfile):
 	## ударные
 	stressed_indexes = []
 	for a,b in zip(all_sounds,all_indexes):
-		if "ˈ" in a:
+		if "ˈ" in a: #нахожу ударные по символу
 			stressed_indexes.append(b)
 	## безударные в конце слова
 	vowels_end_word = []
 	non_stressed_list2 = ['ь','ъ','ɑ'] #список
 	for a,b in zip(all_sounds,all_indexes):
 		if a in non_stressed_list2:
-			if sound_df['stop'][b] in stoppoints:
+			if sound_df['stop'][b] in stoppoints: #безударные в конце слова нахожу по метке конца слова
 				vowels_end_word.append(b)
 
 	## безударные не в конце слова
@@ -71,7 +71,7 @@ def textgrid_experiment(gridfile):
 	non_stressed_list1 = ['ʌ','ь','ъ','и','у','ы'] #список
 	for a,b in zip(all_sounds,all_indexes):
 		if a in non_stressed_list1:
-			if sound_df['stop'][b] not in stoppoints:
+			if sound_df['stop'][b] not in stoppoints: #безударные не в конце слова нахожу по несоответствию метке конца слова
 				non_stressed_non_end_word_indexes.append(b)
 
 	# находим относительную длительность звука
