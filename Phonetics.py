@@ -18,14 +18,17 @@ def textgrid_experiment(gridfile):
 	startpoints = word_df['start'].to_list()
 	stoppoints = word_df['stop'].to_list()
 	sound_df = csv.loc[csv['tier'] == 'Sound'][csv['name']!='']
+	
+	#ищу индексы тех звуков, начальные метки которых совпадают с начальными метками соответствующих слов
 	start_indexes = []
 	for startpoint in startpoints:
-		start_indexes.append(sound_df.index[sound_df.start == startpoint].to_list()) #ищу индексы тех звуков, начальные метки которых совпадают с начальными метками соответствующих слов
+		start_indexes.append(sound_df.index[sound_df.start == startpoint].to_list())
+	#ищу индексы тех звуков, конечные метки которых совпадают с конечными метками соответствующих слов
 	stop_indexes = []
 	for stoppoint in stoppoints:
-		stop_indexes.append(sound_df.index[sound_df.stop == stoppoint].to_list()) #ищу индексы тех звуков, конечные метки которых совпадают с конечными метками соответствующих слов
+		stop_indexes.append(sound_df.index[sound_df.stop == stoppoint].to_list())
 		
-	wordpoints = []                                                         #индексы начального и конечного звуков для каждого слова
+	wordpoints = [] #индексы начального и конечного звуков для каждого слова
 	wrong_indexes = []
 	for start,stop in zip(start_indexes,stop_indexes):
 		if len(start) != 0 and len(stop) != 0:
@@ -39,12 +42,12 @@ def textgrid_experiment(gridfile):
 	startpoints = [i for i in startpoints if startpoints.index(i) not in wrong_indexes] # убираю то, что не совпало
 	stoppoints = [i for i in stoppoints if stoppoints.index(i) not in wrong_indexes] # убираю то, что не совпало
 	
-	absolute_durations = []                                                 #абсолютные длительности слов
+	absolute_durations = [] #абсолютные длительности слов
 	for start,stop in zip (startpoints,stoppoints):
 		absolute_duration = stop-start
 		absolute_durations.append(absolute_duration)
 		
-	amount_of_sounds_in_a_word = []                                         #количество звуков в слове                                                     
+	amount_of_sounds_in_a_word = [] #количество звуков в слове                                                     
 	for two_points in wordpoints:	
 		length = two_points[1]-two_points[0]+1
 		amount_of_sounds_in_a_word.append(length)
