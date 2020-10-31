@@ -20,10 +20,10 @@ def textgrid_experiment(gridfile):
 	sound_df = csv.loc[csv['tier'] == 'Sound'][csv['name']!='']
 	start_indexes = []
 	for startpoint in startpoints:
-		start_indexes.append(sound_df.index[sound_df.start == startpoint].to_list())
+		start_indexes.append(sound_df.index[sound_df.start == startpoint].to_list()) #ищу индексы тех звуков, начальные метки которых совпадают с начальными метками соответствующих слов
 	stop_indexes = []
 	for stoppoint in stoppoints:
-		stop_indexes.append(sound_df.index[sound_df.stop == stoppoint].to_list())
+		stop_indexes.append(sound_df.index[sound_df.stop == stoppoint].to_list()) #ищу индексы тех звуков, конечные метки которых совпадают с конечными метками соответствующих слов
 		
 	wordpoints = []                                                         #индексы начального и конечного звуков для каждого слова
 	wrong_indexes = []
@@ -34,10 +34,10 @@ def textgrid_experiment(gridfile):
 		else:
 			for i,j in enumerate(start_indexes):
 				if j == start:
-					wrong_indexes.append(i)
+					wrong_indexes.append(i) # нахожу то, что не совпало
 	wrong_indexes=set(wrong_indexes)				
-	startpoints = [i for i in startpoints if startpoints.index(i) not in wrong_indexes] 
-	stoppoints = [i for i in stoppoints if stoppoints.index(i) not in wrong_indexes]
+	startpoints = [i for i in startpoints if startpoints.index(i) not in wrong_indexes] # убираю то, что не совпало
+	stoppoints = [i for i in stoppoints if stoppoints.index(i) not in wrong_indexes] # убираю то, что не совпало
 	
 	absolute_durations = []                                                 #абсолютные длительности слов
 	for start,stop in zip (startpoints,stoppoints):
@@ -85,8 +85,8 @@ def textgrid_experiment(gridfile):
 				if s_vowel >= word_marker[0] and s_vowel <= word_marker[1]:
 					true_word_index = wordpoints.index(word_marker)
 					absolute_sound_duration = sound_df['stop'][s_vowel] - sound_df['start'][s_vowel] #абсолютная длительность звука
-					comparative_duration_of_stressful_vowel = absolute_sound_duration*amount_of_sounds_in_a_word[true_word_index]/absolute_durations[true_word_index]
-					result_list.append(comparative_duration_of_stressful_vowel)
+					relative_duration = absolute_sound_duration*amount_of_sounds_in_a_word[true_word_index]/absolute_durations[true_word_index]
+					result_list.append(relative_duration)
 					
 	## для ударных
 	result(stressed_indexes,stressed_v)
