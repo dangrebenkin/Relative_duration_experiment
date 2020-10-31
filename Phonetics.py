@@ -39,8 +39,8 @@ def textgrid_experiment(gridfile):
 				if j == start:
 					wrong_indexes.append(i) ###нахожу то, что не совпало
 	wrong_indexes=set(wrong_indexes)				
-	startpoints = [i for i in startpoints if startpoints.index(i) not in wrong_indexes] # убираю то, что не совпало
-	stoppoints = [i for i in stoppoints if stoppoints.index(i) not in wrong_indexes] # убираю то, что не совпало
+	startpoints = [i for i in startpoints if startpoints.index(i) not in wrong_indexes] ### убираю то, что не совпало
+	stoppoints = [i for i in stoppoints if stoppoints.index(i) not in wrong_indexes] ### убираю то, что не совпало
 	
 	absolute_durations = [] ###абсолютные длительности слов
 	for start,stop in zip (startpoints,stoppoints):
