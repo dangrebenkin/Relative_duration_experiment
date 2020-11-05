@@ -114,3 +114,4 @@ for f in os.listdir("/home/daniil/Загрузки/Split/"):
 
 table = {"Ударные": stressed_vowels_all_results, "Безударные(конец_слова)": final_vowels_all_results,"Безударные(не_конец_слова)" : not_final_vowels_all_results}
 df = pd.DataFrame(data=table)
+df.to_csv('Results.csv',index = False)
